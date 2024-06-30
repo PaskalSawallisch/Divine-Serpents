@@ -1,0 +1,108 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
+
+public class MenuController : MonoBehaviour
+{
+    [Header("VolumeSettings")]
+    [SerializeField] private TMP_Text volumeTextvalue = null;
+    [SerializeField] private Slider volumeSlider = null;
+    [SerializeField] private float defaultVolume = 1.0f;
+   
+
+    [Header("Gameplay Setting")]
+    [SerializeField] private TMP_Text controllerSenTesxxtValue = null;
+    [SerializeField] private Slider volumeSlider = null;
+    [SerializeField] private int deaultSen = 4;
+    public int mainControllerSen = 4;
+
+    [Header("Toggle Settings")]
+    [SerializeField] private Toogle invertToggle = null;
+
+    [Header("Gamplay Settings")]
+    [SerializeField] private GameObject confirmationPrompt = null;
+
+    [Header("Levels To Load")]
+    public string newGameLevel;
+    private string levelToLoad;
+    [SerializeField] private GameObject noSaveGameDialog = null;
+
+    public void NewGameDialoge_Yes()
+    {
+        SceneManager.LoadScene(newGameLevel);
+    }
+
+    public void LoadGameDialogYes()
+    {
+        if (PlayerPrefs.HasKey("SavedLevel"))
+        {
+            levelToLoad = PlayerPrefs.GetString("SavedLevel");
+            SceneManager.LoadScene(levelToLoad);
+        }
+        else
+        {
+            noSaveGameDialog.SetActive(true);
+        }
+    }
+
+    public void ExitButton()
+    {
+        Application.Quit();
+    }
+
+    public void SetVolume(float volume)
+    {
+        AudioListener.volume = volume;
+        volumeTextvalue.text = volume.ToString("0.0");
+    }
+
+    public void VolumeApply()
+    {
+        PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
+        StartCoroutine(ConfirmationBox());
+    }
+
+    public void SerControllerSen(float sensetivity)
+    {
+     mainControllerSen = Mathf.RoundToInt(sensetivity);
+        controllerSenTectValue.text = sensetivity.ToString("0");
+    }
+
+
+    public void GameplayApply()
+    {
+        if (invertYToggle.isOn) 
+        {
+            PlayerPrefs.SetInt("masterInverY", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("masterInvertY", 0);
+        }
+
+        PlayerPrefs.SetFloat("masterSen", mainControllerSen);
+        StartCoroutine (ConfirmationBox());
+    }
+    
+    public void ResetButton(string MenuType)
+    {
+        if (MenuType == "Audio")
+        {
+            AudioListener.volume = defaultVolume;
+            volumeSlider.value = defaultVolume;
+            volumeTextvalue.text = defaultVolume.ToString("0.0");
+            VolumeApply();
+        }
+    }
+
+    public IEnumerator ConfirmationBox()
+    {
+        confirmationPrompt.SetActive(true);
+        yield return new WaitForSeconds(2);
+        confirmationPrompt.SetActive(false);
+    }
+}
+
