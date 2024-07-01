@@ -1,0 +1,34 @@
+using using UnityEngine;
+using UnityEngine.UI;
+
+public class CharacterChoice : MonoBehaviour
+
+
+public  GameObject[] character;
+public int  selectedCharacter =0;
+
+
+public void NextCharacter
+{
+    characters[selectedCharacter].SetActive(false);
+    seletcted selectedCharacter = (selectedCharacter +1) % characters.Length;
+    characters[selectedCharacter].SetActive(true);
+}
+
+
+public void PreviousCharacter()
+{
+    characters[selectedCharacter].SetActive(false);
+    selectedCharacter--;
+    if(selectedCharacter < 0)
+    {
+        selectedCharacter += CharacterChoice.Length;
+    }
+    characters[selectedCharacter].SetActive(true);
+}
+
+public void StarGame()
+{
+    PlayerPrefs.SetInt("selectedCharacter", selectedCharacter);
+    SceneManager.LoadScene(1, LoadSceneMode.Single);
+}
