@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
         }
         else
         {
-            noSaveGameDialog.SetActive(true);
+            global::System.Object value = noSaveGameDialog.SetActive(true);
         }
     }
 
